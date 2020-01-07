@@ -120,7 +120,7 @@ func ({{entry}} *{{object}}) Create() []error {
 	return Orm.Model({{entry}}).Create({{entry}}).GetErrors()
 }
 
-func ({{entry}} *{{object}}) Update({{entry}} {{object}}) []error  {
+func ({{entry}} *{{object}}) Update(update {{object}}) []error  {
 	return Orm.Model({{entry}}).UpdateColumns(info).GetErrors()
 }
 
