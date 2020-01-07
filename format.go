@@ -121,7 +121,7 @@ func ({{entry}} *{{object}}) Create() []error {
 }
 
 func ({{entry}} *{{object}}) Update(update {{object}}) []error  {
-	return Orm.Model({{entry}}).UpdateColumns(info).GetErrors()
+	return Orm.Model({{entry}}).UpdateColumns(update).GetErrors()
 }
 
 func ({{entry}} *{{object}}) Delete()  {
