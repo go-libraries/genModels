@@ -5,7 +5,6 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
-	"sync"
 )
 
 var TypeMappingMysqlToGo = map[string]string{
@@ -45,8 +44,6 @@ var TypeMappingMysqlToGo = map[string]string{
 	"binary":             "[]byte",
 	"varbinary":          "[]byte",
 }
-var tableToGo *Convert
-var syncMysql sync.Once
 
 type MysqlToGo struct {
 	Dsn string
@@ -54,20 +51,17 @@ type MysqlToGo struct {
 }
 
 func GetMysqlToGo() *Convert {
-
-	syncMysql.Do(func() {
-		tableToGo = &Convert{
-			ModelPath:    "",
-			TablePrefix:  make(map[string]string),
-			TableColumn:  make(map[string][]Column),
-			IgnoreTables: make([]string, 0),
-			Tables:       make([]string, 0),
-			Driver: &MysqlToGo{
-				Dsn: "",
-				db:  nil,
-			},
-		}
-	})
+	tableToGo := &Convert{
+		ModelPath:    "",
+		TablePrefix:  make(map[string]string),
+		TableColumn:  make(map[string][]Column),
+		IgnoreTables: make([]string, 0),
+		Tables:       make([]string, 0),
+		Driver: &MysqlToGo{
+			Dsn: "",
+			db:  nil,
+		},
+	}
 	return tableToGo
 }
 

@@ -101,7 +101,7 @@ func ({{entry}} *{{object}}) GetById(id string) {
 
 
 func ({{entry}} *{{object}}) GetOne(condition... interface{}) (err []error) {
-	err = Orm.Model({{entry}}).First(userInfo, condition).GetErrors()
+	err = Orm.Model({{entry}}).First({{entry}}, condition).GetErrors()
 	if len(err) > 0 {
 		return err
 	}
@@ -120,7 +120,7 @@ func ({{entry}} *{{object}}) Create() []error {
 	return Orm.Model({{entry}}).Create({{entry}}).GetErrors()
 }
 
-func ({{entry}} *{{object}}) Update(info UserInfo) []error  {
+func ({{entry}} *{{object}}) Update({{entry}} {{object}}) []error  {
 	return Orm.Model({{entry}}).UpdateColumns(info).GetErrors()
 }
 

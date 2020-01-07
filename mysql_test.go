@@ -19,7 +19,7 @@ func TestMysqlGenFile(t *testing.T) {
 	Mysql.Driver.SetDsn(dsn)
 	//Mysql.SetStyle("bee")
 	Mysql.SetStyle("gorm")
-	Mysql.SetModelPath("/Users/limars/Go/src/github.com/go-libraries/gmodel/models")
+	Mysql.SetModelPath("/Users/limars/Go/src/github.com/go-libraries/genModels/models")
 	Mysql.SetIgnoreTables("cate")
 	Mysql.SetPackageName("models")
 	Mysql.Run()
