@@ -1,6 +1,8 @@
 package genModels
 
 import (
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 	"strings"
 )
 
@@ -95,25 +97,28 @@ func (pf PropertyFormat) GetDefaultFormat() string {
 }
 
 var GormTpl = `
-func ({{entry}} *{{object}}) GetById(id string) {
-	Orm.Model({{entry}}).First({{entry}}, {{entry}}.GetKey() + " = '"+id+"'")
-}
-
-
-func ({{entry}} *{{object}}) GetOne(condition... interface{}) (err []error) {
-	err = Orm.Model({{entry}}).First({{entry}}, condition).GetErrors()
+func Get{{object}}ById(id string)  ({{entry}} *{{object}}) {
+	err := Orm.Model({{entry}}).First({{entry}}, {{entry}}.GetKey() + " = '"+id+"'").GetErrors()
 	if len(err) > 0 {
-		return err
-	}
-	return
-}
-
-func ({{entry}} *{{object}}) GetList(page,limit int64, condition interface{}) (list []*{{object}}) {
-	err := Orm.Model({{entry}}).Limit(limit).Offset((page-1) * limit).Find(list, condition).GetErrors()
-	if err != nil {
 		return nil
 	}
 	return
+}
+
+func Get{{object}}One(where string, args... interface{}) ({{entry}} *{{object}}) {
+	err := Orm.Model({{entry}}).First({{entry}}, where, args...).GetErrors()
+	if len(err) > 0 {
+		return nil
+	}
+	return
+}
+
+func Get{{object}}List(page,limit int64, where string, condition interface{}) (list []*{{object}}) {
+	err := Orm.Model({{entry}}).Limit(limit).Offset((page-1) * limit).Find(list, where, condition).GetErrors()
+	if err != nil {
+		return nil
+	}
+	return 
 }
 
 func ({{entry}} *{{object}}) Create() []error {
@@ -128,6 +133,37 @@ func ({{entry}} *{{object}}) Delete()  {
 	Orm.Model({{entry}}).Delete({{entry}})
 }
 `
+var Orm *gorm.DB
+
+func init() {
+	db, err := gorm.Open("mysql", "{{dns}}")
+	if err != nil {
+		panic("连接数据库失败")
+	}
+	Orm = db
+}
+
+type Model struct {
+	TableName string
+	Primary   string
+	Value 	  interface{}
+}
+
+func (m Model)  GetOne(condition... interface{}) (err []error){
+	return Orm.Table(m.TableName).First(m.Value, condition).GetErrors()
+}
+
+func (m Model)  GetById(id string) {
+	//err = Orm.Model({{entry}}).First({{entry}}, where, args...).GetErrors()
+	s := struct {
+
+	}{}
+	Orm.Table(m.TableName).
+	Orm.Table(m.TableName).First(s, "aa", "bbb").GetErrors()
+}
+func RawSql(sql string, args... interface{}) bool {
+	Orm.Raw(sql, args)
+}
 var GormInit = `
 package {{package}}
 
