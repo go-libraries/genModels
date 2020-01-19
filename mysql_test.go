@@ -1,10 +1,14 @@
 package genModels
 
 import (
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"testing"
+	"github.com/go-libraries/genModels"
 )
 
-func main() {
+func TestMysqlGenFile(t *testing.T) {
+
 	mysqlHost := "127.0.0.1"
 	mysqlPort := "3306"
 	mysqlUser := "root"
@@ -12,8 +16,8 @@ func main() {
 	mysqlDbname := "mgtj_pay"
 
 	dsn := mysqlUser + ":" + mysqlPassword + "@tcp(" + mysqlHost + ":" + mysqlPort + ")/" + mysqlDbname + "?charset=utf8mb4"
-
-	Mysql := GetMysqlToGo()
+	fmt.Println(dsn)
+	Mysql := genModels.GetMysqlToGo()
 	Mysql.Driver.SetDsn(dsn)
 	//Mysql.SetStyle("bee")
 	Mysql.SetStyle("gorm")
