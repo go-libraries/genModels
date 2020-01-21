@@ -97,6 +97,7 @@ func (pf PropertyFormat) GetDefaultFormat() string {
 }
 
 var GormTpl = `
+
 func Get{{object}}ById(id string)  ({{entry}} *{{object}}) {
 	err := Orm.Model({{entry}}).First({{entry}}, {{entry}}.GetKey() + " = '"+id+"'").GetErrors()
 	if len(err) > 0 {
