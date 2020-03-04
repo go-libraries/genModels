@@ -2,7 +2,6 @@ package genModels
 
 import (
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
 	"strings"
 )
 
@@ -133,37 +132,7 @@ func ({{entry}} *{{object}}) Delete()  {
 	Orm.Model({{entry}}).Delete({{entry}})
 }
 `
-var Orm *gorm.DB
 
-func init() {
-	db, err := gorm.Open("mysql", "{{dns}}")
-	if err != nil {
-		panic("连接数据库失败")
-	}
-	Orm = db
-}
-
-type Model struct {
-	TableName string
-	Primary   string
-	Value 	  interface{}
-}
-
-func (m Model)  GetOne(condition... interface{}) (err []error){
-	return Orm.Table(m.TableName).First(m.Value, condition).GetErrors()
-}
-
-func (m Model)  GetById(id string) {
-	//err = Orm.Model({{entry}}).First({{entry}}, where, args...).GetErrors()
-	s := struct {
-
-	}{}
-	Orm.Table(m.TableName).
-	Orm.Table(m.TableName).First(s, "aa", "bbb").GetErrors()
-}
-func RawSql(sql string, args... interface{}) bool {
-	Orm.Raw(sql, args)
-}
 var GormInit = `
 package {{package}}
 
