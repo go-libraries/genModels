@@ -134,6 +134,7 @@ func ({{entry}} *{{object}}) Delete()  {
 }
 `
 
+
 var GormInit = `
 package {{package}}
 
