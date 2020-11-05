@@ -106,6 +106,9 @@ func (c Column) getProperty(format Format) string {
 	defaultF := pf.GetDefaultFormat()
 	if defaultF != "" {
 		if c.IsPrimaryKey() {
+			if  format.Framework == "gorm" {
+				value = strings.Replace(value, "`gorm:\"", "`gorm:\"primary_key;", 1)
+			}
 			return value
 		}
 		value += formatDefault(c.Default, defaultF, c.IsAllowEmpty())
