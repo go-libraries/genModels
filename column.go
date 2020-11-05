@@ -19,7 +19,7 @@ type Column struct {
 	Default         interface{}
 }
 
-func (c Column) GetTag(format Format) string {
+func (c Column) GetTag(format *Format) string {
 
 	propertyString := c.getProperty(format)
 	if propertyString != "" {
@@ -38,6 +38,12 @@ func (c Column) GetTag(format Format) string {
 			if index > -1 {
 				value = value[0:index] + value[index+1:]
 			}
+		}
+	}
+
+	if c.IsPrimaryKey() {
+		if  format.Framework == "gorm" {
+			value = strings.Replace(value, `gorm:"`, `gorm:"primary_key;`, 1)
 		}
 	}
 
@@ -65,7 +71,7 @@ func (c Column) GetGoColumn(prefix string, ucFirst bool) string {
 	return CamelCase(c.ColumnName, prefix, ucFirst)
 }
 
-func (c Column) getProperty(format Format) string {
+func (c Column) getProperty(format *Format) string {
 	if &format.PropertyFormat == nil {
 		return ""
 	}
@@ -106,9 +112,6 @@ func (c Column) getProperty(format Format) string {
 	defaultF := pf.GetDefaultFormat()
 	if defaultF != "" {
 		if c.IsPrimaryKey() {
-			if  format.Framework == "gorm" {
-				value = strings.Replace(value, "`gorm:\"", "`gorm:\"primary_key;", 1)
-			}
 			return value
 		}
 		value += formatDefault(c.Default, defaultF, c.IsAllowEmpty())

@@ -176,7 +176,7 @@ func (convert *Convert) build(tableName, tableRealName, prefix string, columns [
 	return content
 }
 
-func (convert *Convert) buildCurd(tableName string, format Format) string {
+func (convert *Convert) buildCurd(tableName string, format *Format) string {
 	content := ""
 	tpl := format.GetFuncTemplate(convert.Style)
 	if tpl != "" {

@@ -20,12 +20,12 @@ type PropertyFormat struct {
 }
 
 //`gorm:"column:beast_id"`
-var BeeFormat Format
-var DefaultFormat Format
-var GormFormat Format
+var BeeFormat *Format
+var DefaultFormat *Format
+var GormFormat *Format
 
 func init() {
-	BeeFormat = Format{
+	BeeFormat = &Format{
 		Framework: "bee",
 		TabFormat: "`orm:\"column(%s);%s\" json:\"%s\"`",
 		PropertyFormat: PropertyFormat{
@@ -36,11 +36,11 @@ func init() {
 		},
 		AutoInfo: "\nimport \"github.com/astaxie/beego/orm\"\n\nfunc init(){\n\torm.RegisterModel(new({{modelName}}))\n}\n\n",
 	}
-	DefaultFormat = Format{
+	DefaultFormat = &Format{
 		Framework: "default",
 		TabFormat: "`orm:\"%s;%s\" json:\"%s\"`",
 	}
-	GormFormat = Format{
+	GormFormat = &Format{
 		Framework: "gorm",
 		PropertyFormat: PropertyFormat{
 			Size:  "size:%d",
@@ -53,15 +53,16 @@ func init() {
 	}
 }
 
-func GetFormat(framework string) Format {
+func GetFormat(framework string) (format *Format) {
 	switch framework {
-	case "bee":
-		return BeeFormat
-	case "gorm":
-		return GormFormat
-	default:
-		return DefaultFormat
+		case "bee":
+			format = BeeFormat
+		case "gorm":
+			format = GormFormat
+		default:
+			format = DefaultFormat
 	}
+	return
 }
 
 func (format Format) AutoImport(modelName string) string {
