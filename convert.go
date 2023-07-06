@@ -148,25 +148,25 @@ func (convert *Convert) build(tableName, tableRealName, prefix string, columns [
 	content += Tab(depth-1) + "}\n\n"
 
 	if primaryKey != "" {
-		content += fmt.Sprintf("//get real primary key name \nfunc (%s *%s) %s() string {\n",
+		content += fmt.Sprintf("// GetKey get real primary key name \nfunc (%s *%s) %s() string {\n",
 			LcFirst(tableName), tableName, "GetKey")
 		content += fmt.Sprintf("%sreturn \"%s\"\n",
 			Tab(depth), primaryKey)
 		content += "}\n\n\n"
 
-		content += fmt.Sprintf("//get primary key in model\nfunc (%s *%s) %s() %s {\n",
+		content += fmt.Sprintf("// GetKeyProperty get primary key in model\nfunc (%s *%s) %s() %s {\n",
 			LcFirst(tableName), tableName, "GetKeyProperty", primaryColumns.GetGoType())
 		content += fmt.Sprintf("%sreturn %s.%s\n",
 			Tab(depth), LcFirst(tableName), CamelCase(primaryKey, prefix, true))
 		content += "}\n\n\n"
 
-		content += fmt.Sprintf("//set primary key \nfunc (%s *%s) %s(id %s) {\n",
+		content += fmt.Sprintf("// SetKeyProperty set primary key \nfunc (%s *%s) %s(id %s) {\n",
 			LcFirst(tableName), tableName, "SetKeyProperty", primaryColumns.GetGoType())
 		content += fmt.Sprintf("%s %s.%s = id\n",
 			Tab(depth), LcFirst(tableName), CamelCase(primaryKey, prefix, true))
 		content += "}\n\n\n"
 	}
-	content += fmt.Sprintf("//get real table name\nfunc (%s *%s) %s() string {\n",
+	content += fmt.Sprintf("// TableName get real table name\nfunc (%s *%s) %s() string {\n",
 		LcFirst(tableName), tableName, "TableName")
 	content += fmt.Sprintf("%sreturn \"%s\"\n",
 		Tab(depth), tableRealName)
